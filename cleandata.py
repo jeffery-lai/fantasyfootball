@@ -17,11 +17,14 @@ def read_data(dirname):
         'ReceivingYds', 'ReceivingTD', 'HalfPPRFantasyPoints'])
     
     #reads in every file for every year in the data folder
-    for folder in os.listdir(dirname)
+    for folder in os.listdir(dirname):
+        if folder == '.DS_Store':
+            continue
         for f in os.listdir(os.path.join(dirname, folder)):
+
             df = pd.read_csv(os.path.join(dirname, folder, f))
             #concats to main df
-            stats = pd.concat([stats, df], ignore_index=True)
+            stats = pd.concat([stats, df], join = 'inner', ignore_index=True)
     
     return stats
 
@@ -36,7 +39,7 @@ def get_positions(df):
     wr_predictors = ["Rec", "Tgt", "ReceivingYds", "ReceivingTD"]
     te_predictors = ["Rec", "Tgt", "ReceivingYds", "ReceivingTD"]
     qb = df[df['Pos'] == 'QB']
-    rb = df[df['Pos'] == 'RB']
+    rb = df[(df['Pos'] == 'RB') | (df['Pos'] == 'HB') | (df['Pos'] == 'FB')]
     wr = df[df['Pos'] == 'WR']
     te = df[df['Pos'] == 'TE']
 
